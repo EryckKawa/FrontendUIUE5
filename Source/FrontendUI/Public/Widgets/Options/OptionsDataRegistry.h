@@ -1,0 +1,37 @@
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "UObject/NoExportTypes.h"
+#include "OptionsDataRegistry.generated.h"
+
+class UListDataObject_Base;
+class UListDataObject_Collection;
+/**
+ * 
+ */
+UCLASS()
+class FRONTENDUI_API UOptionsDataRegistry : public UObject
+{
+	GENERATED_BODY()
+
+public:
+	//Gets called by options screen right after the object of type UOptionsDataRegistry is created
+	void InitOptionsDataRegistry(ULocalPlayer* InOwningLocalPlayer);
+
+	const TArray<UListDataObject_Collection*>& GetRegisteredOptionsTabCollections() const { return RegisteredOptionsTabCollections; }
+
+	TArray<UListDataObject_Base*> GetListSourceItemsBySelectedTabID(const FName& InSelectedTabID) const;
+
+private:
+	void FindChildListDataRecursively(UListDataObject_Base* InParentData, TArray<UListDataObject_Base*>& OutFoundChildData) const;
+	
+	void InitGameplayCollectionTab();
+	void InitAudioCollectionTab();
+	void InitVideoCollectionTab();
+	void InitControlCollectionTab(ULocalPlayer* InOwningLocalPlayer);
+	void InitEasterEggCollectionTab();
+
+	UPROPERTY(Transient)
+	TArray<UListDataObject_Collection*> RegisteredOptionsTabCollections;
+};
